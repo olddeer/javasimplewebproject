@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1
--- Время создания: Фев 09 2018 г., 00:09
+-- Время создания: Апр 14 2018 г., 15:07
 -- Версия сервера: 10.1.29-MariaDB
 -- Версия PHP: 7.2.0
 
@@ -21,6 +21,139 @@ SET time_zone = "+00:00";
 --
 -- База данных: `finaltask`
 --
+
+DELIMITER $$
+--
+-- Процедуры
+--
+CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `change_account_login` (IN `log` VARCHAR(100), IN `us_id` INT(100))  NO SQL
+BEGIN
+    DECLARE
+        LOG2 VARCHAR(20); DECLARE isLog BOOLEAN DEFAULT 0; DECLARE log_cur CURSOR FOR
+    SELECT
+        users.login
+    FROM
+        `users`; DECLARE CONTINUE
+    HANDLER FOR SQLSTATE
+        '02000'
+    SET
+        @done = 1; OPEN log_cur; REPEAT FETCH log_cur
+    INTO LOG2; IF LOG = LOG2 THEN
+SET
+    isLog = 1;
+END IF; UNTIL @done
+END REPEAT; CLOSE log_cur; IF isLog = 0 THEN
+UPDATE
+    users
+SET
+    login = LOG
+WHERE
+    users.user_id = us_id;
+END IF;
+END$$
+
+CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `gets()` (IN `arr` VARCHAR(100))  NO SQL
+BEGIN
+
+SET @mas="i like your mum";
+
+END$$
+
+CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `gets2` (IN `qwe` INT(11))  NO SQL
+SET @mas=5$$
+
+CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `gets23` (IN `qw22e` INT(11))  NO SQL
+SET @mas=5$$
+
+CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `insert_trip` (`date_creation` DATETIME(6), `date_set_off` DATETIME(6), `destination` VARCHAR(10), `from` VARCHAR(10), `status_id` INTEGER(100), `dispatcher_id` INTEGER(100))  BEGIN 
+
+ START TRANSACTION;
+ INSERT INTO `trips` VALUES(NULL,date_creation,status_id,destination,date_set_off,`from`,dispatcher_id);
+ IF destination = `from` THEN
+ ROLLBACK;
+ ELSE 
+ COMMIT;
+ END IF;
+
+ END$$
+
+CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `insert_user` (`first_name` VARCHAR(100), `last_name` VARCHAR(100), `login` VARCHAR(100), `PASSWORD` VARCHAR(100), `role_id` INTEGER(100))  NO SQL
+BEGIN
+DECLARE LOG2 VARCHAR(20) ;
+   DECLARE log_cur CURSOR FOR
+SELECT
+    `users`.login
+FROM
+    `users` ;
+    DECLARE EXIT
+HANDLER FOR SQLEXCEPTION
+BEGIN
+    ROLLBACK
+        ;
+END ; DECLARE EXIT
+HANDLER FOR SQLWARNING
+BEGIN
+    ROLLBACK
+        ;
+END ;
+
+   DECLARE CONTINUE
+HANDLER FOR SQLSTATE
+    '02000'
+SET
+    @done = 1 ; 
+    OPEN log_cur ; 
+    REPEAT FETCH log_cur
+INTO LOG2 ;
+ UNTIL @done
+END REPEAT ; CLOSE log_cur ;
+INSERT INTO users
+VALUES(
+    NULL,
+    login,
+    PASSWORD,
+    first_name,
+    last_name,
+    role_id
+) ;
+
+  
+END$$
+
+CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `insert_user2` (IN `first_name` VARCHAR(100), IN `last_name` VARCHAR(100), IN `login` VARCHAR(100), IN `password` VARCHAR(100), IN `role_id` INT(100))  NO SQL
+BEGIN
+DECLARE LOG2 VARCHAR(20) DEFAULT 0;
+DECLARE  isLog INTEGER(20) DEFAULT 0;
+DECLARE log_cur CURSOR FOR SELECT `users`.login FROM `users` ; 
+DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+BEGIN
+ROLLBACK; 
+END; 
+
+DECLARE EXIT HANDLER FOR SQLWARNING 
+BEGIN 
+ROLLBACK;
+END; 
+
+DECLARE CONTINUE HANDLER FOR SQLSTATE '02000' SET @done = 1 ;
+OPEN log_cur ; 
+REPEAT FETCH log_cur INTO LOG2 ;
+IF login=LOG2 THEN 
+SET isLog=1;
+END IF; 
+UNTIL @done END REPEAT;
+START TRANSACTION;
+INSERT INTO users VALUES( NULL, login, `password`, first_name, last_name, role_id );
+IF isLog=0 THEN
+COMMIT;
+ELSE 
+ROLLBACK;
+END IF;
+
+CLOSE log_cur ; 
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -43,7 +176,7 @@ INSERT INTO `autos` (`auto_id`, `name`, `auto_type`, `auto_status`) VALUES
 (3, 'Ferari', 3, 3),
 (4, 'Mercedes sprinter', 2, 3),
 (5, 'Lada', 3, 2),
-(6, 'GAZ', 2, 1),
+(6, 'GAZ', 2, 3),
 (7, 'KAMAZ', 1, 1),
 (8, 'BMW', 3, 3),
 (9, 'Porche', 3, 1);
@@ -108,7 +241,8 @@ INSERT INTO `broken_autos` (`id`, `auto_id`, `date_of_broken`) VALUES
 (1, 3, '2018-02-01'),
 (2, 5, '2018-02-01'),
 (3, 8, '2018-01-03'),
-(4, 4, '2018-02-01');
+(4, 4, '2018-02-01'),
+(5, 6, '2018-01-09');
 
 -- --------------------------------------------------------
 
@@ -131,7 +265,9 @@ INSERT INTO `completed_requests` (`id`, `request_id`, `auto_id`, `date_completed
 (12, 30, 3, '2018-01-31 00:00:00'),
 (13, 39, 7, '2018-01-03 00:00:00'),
 (14, 40, 3, '2018-01-02 00:00:00'),
-(15, 31, 8, '2018-01-03 00:00:00');
+(15, 31, 8, '2018-01-03 00:00:00'),
+(16, 41, 6, '2018-01-09 00:00:00'),
+(17, 42, 9, '2018-01-30 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -160,7 +296,10 @@ INSERT INTO `requests` (`request_id`, `date_creation`, `trip_id`, `auto_type_id`
 (37, '2018-02-01 00:00:00', 32, 1, 1),
 (38, '2018-02-01 00:00:00', 30, 1, 1),
 (39, '2018-02-01 00:00:00', 33, 1, 1),
-(40, '2018-02-01 00:00:00', 34, 3, 1);
+(40, '2018-02-01 00:00:00', 34, 3, 1),
+(41, '2018-03-08 00:00:00', 35, 2, 1),
+(42, '2018-03-29 00:00:00', 42, 3, 1),
+(43, '2018-04-02 00:00:00', 43, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -203,7 +342,7 @@ CREATE TABLE `trips` (
 --
 
 INSERT INTO `trips` (`trip_id`, `date_creation`, `status_id`, `destination`, `date_set_off`, `from`, `dispatcher_id`) VALUES
-(8, '2018-01-28 00:00:00', 1, 'Kiev', '2018-01-01 00:00:00', 'Poltava', 2),
+(8, '2018-02-28 00:00:00', 1, 'Kiev', '2018-01-01 00:00:00', 'Poltava', 2),
 (13, '2018-01-30 00:00:00', 4, 'Kharkov', '2018-01-31 00:00:00', 'Kiev', 2),
 (28, '2018-01-31 00:00:00', 1, 'Uganda', '2018-01-31 00:00:00', 'Kiev', 2),
 (29, '2018-01-31 00:00:00', 1, 'Harvard', '2018-01-01 00:00:00', 'London', 2),
@@ -211,7 +350,12 @@ INSERT INTO `trips` (`trip_id`, `date_creation`, `status_id`, `destination`, `da
 (31, '2018-02-01 00:00:00', 4, 'Kharkov', '2018-01-02 00:00:00', 'Poltava', 2),
 (32, '2018-02-01 00:00:00', 4, 'Hungary', '2018-01-03 00:00:00', 'Austria', 2),
 (33, '2018-02-01 00:00:00', 1, 'Uganda', '2018-01-02 00:00:00', 'Kiev', 2),
-(34, '2018-02-01 00:00:00', 1, 'Kiev', '2018-01-02 00:00:00', 'Kharkov', 2);
+(34, '2018-02-01 00:00:00', 1, 'Kiev', '2018-01-02 00:00:00', 'Kharkov', 2),
+(35, '2018-03-08 00:00:00', 1, 'Poltava', '2018-01-09 00:00:00', 'KIev', 2),
+(38, '2018-03-21 00:00:00', 1, 'Kyiv', '2018-03-22 00:00:00', 'Moscow', 4),
+(41, '2009-03-02 00:00:00', 1, 'Poltava', '2010-04-03 00:00:00', 'Kyiv', 1),
+(42, '2018-03-29 00:00:00', 1, 'Paris', '2018-01-30 00:00:00', 'Kharkov', 4),
+(43, '2018-04-02 00:00:00', 4, 'Back', '2018-01-03 00:00:00', 'To', 4);
 
 -- --------------------------------------------------------
 
@@ -246,18 +390,20 @@ CREATE TABLE `users` (
   `password` varchar(100) NOT NULL,
   `first_name` varchar(100) NOT NULL,
   `last_name` varchar(100) NOT NULL,
-  `role_id` int(100) NOT NULL
+  `role_id` int(100) NOT NULL,
+  `ban` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Дамп данных таблицы `users`
 --
 
-INSERT INTO `users` (`user_id`, `login`, `password`, `first_name`, `last_name`, `role_id`) VALUES
-(1, 'olddeer', 'qwe', 'Alex', 'Sut', 2),
-(2, 'lolipop', 'qwerr', 'Denis', 'Pogreb', 3),
-(3, 'petrov', 'qwe', 'Jack', 'Petrov', 2),
-(4, 'obama', 'qwer', 'Ivan', 'Ivanov', 3);
+INSERT INTO `users` (`user_id`, `login`, `password`, `first_name`, `last_name`, `role_id`, `ban`) VALUES
+(1, 'olddeer', 'qwe', 'Alex', 'Sut', 2, 1),
+(2, 'uganda', 'qwerr', 'Denis', 'Pogreb', 3, 1),
+(3, 'petrov', 'qwe', 'Jack', 'Petrov', 2, 1),
+(4, 'obama', 'qwer', 'Ivan', 'Ivanov', 3, 1),
+(14, 'petrovvv', 'qwe', 'Alex', 'sut', 1, 1);
 
 --
 -- Индексы сохранённых таблиц
@@ -360,31 +506,31 @@ ALTER TABLE `auto_types`
 -- AUTO_INCREMENT для таблицы `broken_autos`
 --
 ALTER TABLE `broken_autos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT для таблицы `completed_requests`
 --
 ALTER TABLE `completed_requests`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT для таблицы `requests`
 --
 ALTER TABLE `requests`
-  MODIFY `request_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `request_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT для таблицы `trips`
 --
 ALTER TABLE `trips`
-  MODIFY `trip_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `trip_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `user_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц
@@ -395,7 +541,7 @@ ALTER TABLE `users`
 --
 ALTER TABLE `autos`
   ADD CONSTRAINT `autos_ibfk_1` FOREIGN KEY (`auto_type`) REFERENCES `auto_types` (`auto_type_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `autos_ibfk_2` FOREIGN KEY (`auto_status`) REFERENCES `auto_status` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `autos_ibfk_2` FOREIGN KEY (`auto_status`) REFERENCES `auto_status` (`id`);
 
 --
 -- Ограничения внешнего ключа таблицы `broken_autos`
