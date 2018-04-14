@@ -1,0 +1,287 @@
+@charset "UTF-8";
+
+body {
+	
+	
+	background-color:#ccf5ff;
+}
+
+#newUser{
+	
+	position: absolute;
+	right:50%;
+	top: 15%;
+	width: 130px;
+	
+}
+
+h2{
+	position: absolute;
+	bottom: 90%;
+	left: 40%;
+	font: 40px;
+}
+table {
+		text-align: center;
+	margin-top: 20px;
+	border:0;
+	border-collapse:collapse;
+	width: 100%;
+	cell-color: #e6ffe6;
+	background-color:#e6ffe6;
+	
+}
+
+#compl{
+	padding-top: 18px;
+	float: right;
+	
+}
+tr:nth-child(even){
+	background-color: #f2f2f2;
+	}
+.td-make{
+	width: 20%;
+	border-top: 1 solid black;
+}
+.td-make2{
+	background-color::#ccf5ff;
+	width: 20%;
+	
+}
+#mkbutt{
+	postition: absolute;
+	left: 50%;
+	bottom: 50%;
+	
+}
+
+
+.table-make{
+	
+	width: 20%;
+	border: 1px solid black;
+	margin-left: 40%;
+	
+}
+
+#butMake{
+	height: 20px;
+	width: 140px;
+}
+
+#mkTr{
+	text-align: center;
+	padding-top:18px;
+	}
+td {
+	text-align: center;
+	background-color:#e6ffe6;
+	height: 80px;
+	border:0px solid black;
+	border-bottom: 1px solid black;
+	padding: 2px;
+}
+
+td >  #green{
+	z-index: 10;
+	text-align: center;
+	background-color:green;
+	height: 80px;
+	width: 30px;
+	border:0px solid black;
+	border-bottom: 1px solid black;
+	padding: 2px;
+}
+td > #red{
+	z-index: 10;
+	text-align: center;
+	background-color:red;
+	height: 80px;
+	width: 30px;
+	border:0px solid black;
+	border-bottom: 1px solid black;
+	padding: 2px;
+}
+th{
+	border-top: 1px solid black;
+	background-color:#e6ffe6;
+	height: 30px;
+	border:0px solid black;
+	border-bottom: 1px solid black;
+	padding: 2px;
+	text-align: center;
+}
+.tdmenus{
+	height: 20px;
+	padding-top: 20px;
+	border: 0;
+	background-color:#ccf5ff;
+	
+}
+
+#header {
+	border: 0px solid black;	
+}
+#sortBut{
+	width: 70px;
+	
+}
+#sortForm{
+	text-align: center;
+}
+#sortSel{
+		width:100px;
+}
+#mainTd{
+	border-bottom: 0;
+	background-color:#ccf5ff;
+	text-align: left;
+}
+
+#typeChoose{
+
+	float: right;
+	
+}
+#main-container {
+	width: 100%;
+	height: 100%;
+}
+
+
+#header {
+	
+	padding: 0px;
+}
+#men{
+	border: 0px;
+	width: 100%;
+	height:50px;
+	background-color:#ccf5ff;
+
+}
+.menus{
+	height:36px;
+	width: 300px;
+	border-radius: 6px;
+	border-bottom: 0;
+	
+}
+#leftHeader {
+	
+
+	margin-left: 10px;
+	padding: 2px;
+	clear: both;
+}
+
+
+#rightHeader {
+	
+	float: right;
+	text-align: right;
+	margin-right: 5px;
+	padding: 2px;
+	
+	
+	font: 40px Arial blue;
+	
+}
+
+#logout{
+	
+	width: 100px;
+}
+
+.sortBut{
+	float: right;
+	
+}
+
+
+.error {
+	font-size: large;
+	color: rgb(204, 0, 0);
+}
+
+
+.center {
+	text-align: center;
+	vertical-align: middle;
+}
+
+.noborder {
+	border: 2px solid red;	
+}
+
+
+#login_form > fieldset {
+	display: inline;
+	width: 200px;
+    height:100px;
+	
+}
+
+#login_form{
+
+	
+
+	width: 350px;
+    height:350px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -125px 0 0 -125px;
+}
+#login_form > input[type=submit] {
+	margin-top: 5px;
+	width: 300px;
+	height: 30px;
+}
+
+#login_form > input[type=text] {
+	margin-top: 5px;
+	border-radius: 12px;
+	width: 300px;
+	height: 30px;
+	font: 30pt;
+	font-family: monospace;
+	font-size: 19px;
+}
+
+#login_form > input[type=password] {
+	margin-top: 5px;
+		width: 300px;
+		height: 30px;
+		border-radius: 12px;
+}
+
+#list_menu_table {
+	margin-top: 5px;
+}
+
+#list_menu_table thead {
+	text-align: center;
+}
+
+#list_menu_table td:last-child {
+	text-align: center;
+}
+
+
+#list_order_table > thead > tr {
+	text-align: center;
+}
+
+#list_order_table td + td + td {
+	text-align: center;
+}
+
+#list_order_table > tbody td + td + td + td {
+	text-align: left;
+}
+
+#make_order {
+	margin-top: 5px;
+}

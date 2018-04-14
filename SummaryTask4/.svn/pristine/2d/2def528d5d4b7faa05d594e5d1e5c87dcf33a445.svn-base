@@ -1,0 +1,92 @@
+
+<%@ include file="/WEB-INF/jspf/directive/taglib.jspf"%>
+<%@ page import="ua.nure.sutyagin.SummaryTask4.enteties.Role"%>
+
+<tr>
+	<td id="header"><c:if test="${not empty user}">
+
+			<div id="leftHeader">
+
+				<c:choose>
+
+					
+					<c:when test="${userRole.name == 'driver' }">
+						<form action=Controller method=POST>
+							<br>
+							<input type="submit" value="List of trips"> <br>
+							<input type="hidden" name="command" value="listTrips">
+						</form>
+						<form action=Controller method=POST>
+							<br>
+							<input type="submit" value="List of requests"> <br>
+							<input type="hidden" name="command" value="seeRequests">
+						</form>
+						<form action=Controller method=POST>
+							<br>
+							<input type="submit" value="List of completed requests">
+							<br>
+							<input type="hidden" name="command" value="listComplReq">
+						</form>
+						<form action=Controller method=POST>
+							<br>
+							<input type="submit" value="List of autos"> <br>
+							<input type="hidden" name="command" value="listAutos">
+						</form>
+					</c:when>
+
+
+					
+					<c:when test="${userRole.name == 'dispatcher'}">
+						<form action=Controller method=POST>
+							<br>
+							<input type="submit" value="List of trips"> <br>
+							<input type="hidden" name="command" value="listTripsDisp">
+						</form>
+						<form action=Controller method=POST>
+							<br>
+							<input type="submit" value="List of requests"> <br>
+							<input type="hidden" name="command" value="seeRequests">
+						</form>
+						<form action=Controller method=POST>
+							<br>
+							<input type="submit" value="List of completed requests">
+							<br>
+							<input type="hidden" name="command" value="listComplReq">
+						</form>
+						<form action=Controller method=POST>
+							<br>
+							<input type="submit" value="List of autos"> <br>
+							<input type="hidden" name="command" value="listAutos">
+						</form>
+					</c:when>
+				</c:choose>
+
+			
+
+			</div>
+
+		
+			<div id="rightHeader">
+
+				
+				<c:out value="${user.firstName} ${user.secondName}" />
+
+			
+				<c:if test="${not empty userRole}">
+					<c:out value="(${userRole.name})" />
+				</c:if>
+
+				
+			<form action=Controller method=POST>
+							<br>
+							<input type="submit" value="Logout"> <br>
+							<input type="hidden" name="command" value="logout">
+						</form>
+
+			</div>
+		</c:if> <c:if test="${empty user and title ne 'Login'}">
+			<div id="rightHeader">
+				<a href="login.jsp">Login</a>
+			</div>
+		</c:if></td>
+</tr>

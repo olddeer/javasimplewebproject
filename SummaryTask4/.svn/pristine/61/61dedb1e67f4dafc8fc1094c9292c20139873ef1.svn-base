@@ -1,0 +1,41 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="stylesheet" type="text/css" media="screen" href="style/myStyle.css"/>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+  
+  <script>
+  $(document).ready(function() {
+    $("#datepicker").datepicker();
+  });
+  </script>
+
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Make trip</title>
+</head>
+<body>
+	<%@ include file="/WEB-INF/jspf/header1.jspf"%>
+<h2>MAKE TRIP</h2>
+	<table border="1">
+	<tr>
+ 		 <td>
+ 		 <form id="trip_input_form" action="Controller" method=POST>
+		<p><label>destination:</label><input type="text" name="dest"></p>
+ 		<p><label>from:</label><input type="text" name="from"></p>
+ 		<p>	<label>date set off</label></p>
+		<p><input id="datepicker" name="date"></p>
+		<p><input type="submit"/></p>
+		<input type="hidden" name="command" value="listTripsDisp"/> 
+		</form>
+		</td>
+		
+		
+		</tr>
+
+	</table>
+</body>
+</html>
