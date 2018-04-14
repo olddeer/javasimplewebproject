@@ -1,6 +1,7 @@
 
 <%@ include file="/WEB-INF/jspf/directive/taglib.jspf"%>
 <%@ page import="ua.nure.sutyagin.SummaryTask4.enteties.Role"%>
+<c:if test="${not empty user}">
 <hr width="100%"/>
 <table id="men" border="0">
 <tr>
@@ -151,3 +152,4 @@
 </tr>
 </table>
 <hr width="100%"/>
+</c:if>
