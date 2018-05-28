@@ -10,9 +10,22 @@ public class Trip extends Entity{
 	private static final long serialVersionUID = 770625403563895111L;
 private Date dateCreation;
 private int statusId;	
-private String destination;
+private int destination_id;
+
+public int getDestination_id() {
+	return destination_id;
+}
+public void setDestination_id(int destination_id) {
+	this.destination_id = destination_id;
+}
+public int getFrom_id() {
+	return from_id;
+}
+public void setFrom_id(int from_id) {
+	this.from_id = from_id;
+}
 private Date dateSetOff;
-private String from;
+private int from_id;
 private int dispatcher_id;
 
 public Date getDateCreation() {
@@ -27,44 +40,23 @@ public int getStatusId() {
 public void setStatusId(int statusId) {
 	this.statusId = statusId;
 }
-public String getDestination() {
-	return destination;
-}
-public void setDestination(String destination) {
-	this.destination = destination;
-}
+
 public Date getDateSetOff() {
 	return dateSetOff;
 }
 public void setDateSetOff(Date dateSetOff) {
 	this.dateSetOff = dateSetOff;
 }
-public String getFrom() {
-	return from;
-}
-public void setFrom(String from) {
-	this.from = from;
-}
+
 public static long getSerialversionuid() {
 	return serialVersionUID;
-}
-public static Trip createTrip(String strin) {
-	String[] string=strin.split(" ");
-	Trip trip=new Trip();
-	trip.statusId=Integer.parseInt(string[0]);
-	trip.from=string[1];
-	trip.dateCreation= Date.valueOf(string[2]);
-	trip.dateSetOff=Date.valueOf(string[3]);
-	trip.dispatcher_id=Integer.parseInt(string[4]);
-	
-	return trip;
 }
 
 
 @Override
 public String toString() {
-	return "Trip [dateCreation=" + dateCreation + ", statusId=" + statusId + ", destination=" + destination
-			+ ", dateSetOff=" + dateSetOff + ", from=" + from  + "]";
+	return "Trip [dateCreation=" + dateCreation + ", statusId=" + statusId + ", destination=" + destination_id
+			+ ", dateSetOff=" + dateSetOff + ", from=" + from_id  + "]";
 }
 public int getDispatcher_id() {
 	return dispatcher_id;
@@ -73,6 +65,28 @@ public void setDispatcher_id(int dispatcher_id) {
 	this.dispatcher_id = dispatcher_id;
 }
 
+public String getDestination() {
+	String name="NOT FOUND";
+	try {
+		name = DBManager.getInstance().findAddressById(destination_id).getName();
+	} catch (DBException | ClassNotFoundException e) {
+		
+		e.printStackTrace();
+	}
+	return name.trim();
+}
+
+public String getFrom() {
+	String name="NOT FOUND";
+	try {
+		name = DBManager.getInstance().findAddressById(from_id).getName();
+	} catch (DBException | ClassNotFoundException e) {
+		
+		e.printStackTrace();
+	}
+	return name;
+	
+}
 public String getStatusName() {
 	return Status.getStatus(this).getName();
 }

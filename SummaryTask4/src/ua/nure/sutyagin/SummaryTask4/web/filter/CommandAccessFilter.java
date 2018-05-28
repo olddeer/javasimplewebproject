@@ -45,6 +45,7 @@ public class CommandAccessFilter implements Filter {
 			LOG.debug("Filter finished");
 			chain.doFilter(request, response);
 		} else {
+			
 			String errorMessasge = "You do not have permission to access the requested resource";
 			
 			request.setAttribute("errorMessage", errorMessasge);
@@ -79,7 +80,9 @@ public class CommandAccessFilter implements Filter {
 			return false;
 		}
 		
-		return accessMap.get(userRole).contains(commandName)
+		boolean access= accessMap.get(userRole).contains(commandName);
+		
+		return access
 				|| commons.contains(commandName);
 	}
 
@@ -90,6 +93,7 @@ public class CommandAccessFilter implements Filter {
 		accessMap.put(Role.ADMINISTRATOR, asList(fConfig.getInitParameter("administrator")));
 		accessMap.put(Role.DISPATCHER, asList(fConfig.getInitParameter("dispatcher")));
 		accessMap.put(Role.DRIVER, asList(fConfig.getInitParameter("driver")));
+		
 		LOG.trace("Access map --> " + accessMap);
 
 		// commons

@@ -2,7 +2,12 @@ package ua.nure.sutyagin.SummaryTask4.web.command;
 
 import java.util.Map;
 import java.util.TreeMap;
-
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
 import org.apache.log4j.Logger;
 
 
@@ -31,7 +36,17 @@ public class CommandContainer {
 		commands.put("noCommand", new NoCommand());
 		commands.put("listUsers", new ListUsersCommand());
 		commands.put("makeBan", new MakeBanCommand());
-		commands.put("makeUser", new MakeUserCommand());
+		commands.put("regNewUser", new MakeUserCommand());
+		commands.put("deleteCar", new DeleteAutoCommand());
+		commands.put("selectUpdateCar", new SelectCarUpdateCommand());
+		commands.put("setLocale", new SetLocaleCommand());
+		commands.put("map", new MapCommand());
+		commands.put("deleteUser", new DeleteUserCommand());
+		commands.put("addAuto", new AddAutoCommand());
+		commands.put("listAddress", new ListAddressCommand());
+		commands.put("addAddress", new AddAddressCommand());
+		commands.put("deleteAdr", new DeleteAddressCommand());
+		commands.put("updateAdr",new UpdateAddressCommand());
 		LOG.debug("Command container was successfully initialized");
 		LOG.trace("Number of commands --> " + commands.size());
 	}

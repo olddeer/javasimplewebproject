@@ -23,7 +23,7 @@ public class MakeUserCommand extends Command {
 	public String execute(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException, AppException {
 		Role[] roles=Role.values();
-		request.setAttribute("roles", roles);
+		request.getSession().setAttribute("roles", roles);
 		return Path.PAGE_MAKE_USER;
 	}
 

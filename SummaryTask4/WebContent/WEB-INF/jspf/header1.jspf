@@ -1,9 +1,18 @@
 
 <%@ include file="/WEB-INF/jspf/directive/taglib.jspf"%>
 <%@ page import="ua.nure.sutyagin.SummaryTask4.enteties.Role"%>
+<script>
+function changeColor(){
+	document.getElementById("listAutoMenu").style.backgroundColor="#e6ffe6";
+	
+}
+
+</script>
 <c:if test="${not empty user}">
 <hr width="100%"/>
+
 <table id="men" border="0">
+
 <tr>
 
 	<c:if test="${not empty user}">
@@ -53,6 +62,13 @@
 							
 							<input type="submit" class="menus" value="List of trips"> 
 							<input type="hidden" name="command" value="listTripsDisp">
+						</form>
+							</td>
+							<td class="tdmenus">
+						<form action=Controller method=POST>
+							
+							<input type="submit" class="menus" value="List of address"> 
+							<input type="hidden" name="command" value="listAddress">
 						</form>
 							</td>
 								<td class="tdmenus">
@@ -114,7 +130,7 @@
 								<td class="tdmenus">
 						<form action=Controller method=POST>
 							
-							<input type="submit" class="menus" value="List of autos"> 
+							<input type="submit" id="listAutoMenu" onClick="changeColor()" class="menus" value="List of autos"> 
 							<input type="hidden" name="command" value="listAutos">
 						</form>
 							</td>

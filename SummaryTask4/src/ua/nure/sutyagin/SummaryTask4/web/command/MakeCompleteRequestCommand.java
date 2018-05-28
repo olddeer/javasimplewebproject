@@ -16,6 +16,7 @@ import ua.nure.sutyagin.SummaryTask4.enteties.Auto;
 import ua.nure.sutyagin.SummaryTask4.enteties.Broken_Auto;
 import ua.nure.sutyagin.SummaryTask4.enteties.CompletedRequest;
 import ua.nure.sutyagin.SummaryTask4.enteties.Request;
+import ua.nure.sutyagin.SummaryTask4.enteties.Trip;
 import ua.nure.sutyagin.SummaryTask4.exception.AppException;
 
 public class MakeCompleteRequestCommand extends Command {
@@ -29,6 +30,12 @@ public class MakeCompleteRequestCommand extends Command {
 		int reqId=Integer.parseInt((String)request.getSession().getAttribute("req"));
 		try {
 			Request req=DBManager.getInstance().findReqById(reqId);
+			
+			Trip trp=DBManager.getInstance().findTripById(req.getTripId());
+			trp.setStatusId(4);
+			DBManager.getInstance().updateTrip(trp);
+			LOG.trace("Trip has been updated");
+			
 			CompletedRequest cr=new CompletedRequest();
 			List<Broken_Auto> brokenAutos=DBManager.getInstance().findAllBrokenCarsByType(req.getAutoTypeId());
 		LOG.trace("get brokens "+ brokenAutos);

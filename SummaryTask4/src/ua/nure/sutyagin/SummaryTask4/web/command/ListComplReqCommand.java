@@ -29,6 +29,7 @@ public class ListComplReqCommand extends Command {
 		if (request.getSession().getAttribute("dateCompl") != null) {
 			CompletedRequest cr = (CompletedRequest) request.getSession().getAttribute("cr");
 			SimpleDateFormat format = new SimpleDateFormat("mm/dd/yyyy");
+			LOG.trace(cr);
 			Date dt;
 			
 			try {
@@ -45,7 +46,7 @@ public class ListComplReqCommand extends Command {
 		List<CompletedRequest> listComplReq=null;
 		
 		try {
-			if (((Role) request.getSession().getAttribute("userRole")).getName().equals( "dispatcher")) {
+			if (((Role) request.getSession().getAttribute("userRole")).getName().equals( "dispatcher") ||((Role) request.getSession().getAttribute("userRole")).getName().equals( "administrator") ) {
 				
 				listComplReq=DBManager.getInstance().findAllCompReq();
 				request.getSession().setAttribute("complReq", new CompletedRequest());

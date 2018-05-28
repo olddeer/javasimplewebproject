@@ -24,8 +24,8 @@ public class SeeRequestsCommand extends Command{
 			throws IOException, ServletException {
 		List<Request> listReq=null;
 		try {
-			if(((User)request.getSession().getAttribute("user")).getRoleId()==3)
-			 listReq=DBManager.getInstance().findAllRequestsByStatusId(4,((User)request.getSession().getAttribute("user")).getId());
+			if(((User)request.getSession().getAttribute("user")).getRoleId()==3 || ((User)request.getSession().getAttribute("user")).getRoleId()==1)
+			 listReq=DBManager.getInstance().findAllRequestsByStatusId(3,((User)request.getSession().getAttribute("user")).getId());
 			else 
 			listReq=DBManager.getInstance().findAllRequestsByStatusId(4);
 			 

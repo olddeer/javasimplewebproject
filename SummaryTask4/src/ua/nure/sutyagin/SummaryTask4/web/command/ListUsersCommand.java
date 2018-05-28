@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import ua.nure.sutyagin.SummartTask4.db.DBManager;
 import ua.nure.sutyagin.SummaryTask4.Path;
 import ua.nure.sutyagin.SummaryTask4.enteties.Auto;
+import ua.nure.sutyagin.SummaryTask4.enteties.Role;
 import ua.nure.sutyagin.SummaryTask4.enteties.User;
 import ua.nure.sutyagin.SummaryTask4.exception.AppException;
 
@@ -27,15 +28,27 @@ public class ListUsersCommand extends Command {
 		DBManager  dbm = null;
 		try {
 			dbm=DBManager.getInstance();
-			if(request.getSession().getAttribute("newUser")!=null) 
+			if(request.getSession().getAttribute("login2")!=null) 
 			{ User us=new User();
-			us.setFirstName((String)request.getSession().getAttribute("fname"));
-			us.setSecondName((String)request.getSession().getAttribute("sname"));
-			us.setLogin((String)request.getSession().getAttribute("login"));
+			
+			
+			us.setFirstName(((String)request.getSession().getAttribute("fname")).trim());
+			us.setSecondName(((String)request.getSession().getAttribute("sname")).trim());
+			us.setLogin(((String)request.getSession().getAttribute("login2")).trim());
 			us.setPassword((String)request.getSession().getAttribute("passw"));
 			us.setRoleId(Integer.parseInt(((String)request.getSession().getAttribute("role")).trim()));
 			us.setBan(true);
-				dbm.insertUser(us);
+			request.getSession().removeAttribute("login2");
+				String insertMssg=dbm.insertUser(us);
+				if(insertMssg!=null) {
+				if(insertMssg.equals("Login is required")) {
+						
+					request.setAttribute("logInfo", insertMssg);
+						//request.getSession().setAttribute("logInfo", insertMssg);
+						Role[] roles=Role.values();
+						request.getSession().setAttribute("roles", roles);
+						return Path.PAGE_MAKE_USER;
+				}}
 			}
 			
 		} catch (ClassNotFoundException e) {

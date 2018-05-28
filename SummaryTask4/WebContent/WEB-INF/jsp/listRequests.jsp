@@ -34,12 +34,24 @@
 			<td><input type="radio"  name="req" value="${req.getId()}"/>Make a full request</td>						
 			</c:if>
 			
+			<c:if test="${userRole.name == 'administrator'}">
+			<td><input type="radio"  name="req" value="${req.getId()}"/>Make a full request</td>						
+			</c:if>
+			
 			</tr>
 			
 			</c:forEach>
 			<tr>
 			<c:if test="${userRole.name == 'dispatcher'}">
-				<td>
+				<td colspan="3">
+				
+					<input type="hidden" name="command" value="makeCompleteRequest"/>
+					<input type="submit" value="Make a complete request">
+				
+				</td>
+			</c:if>
+			<c:if test="${userRole.name == 'administrator'}">
+				<td colspan="3">
 				
 					<input type="hidden" name="command" value="makeCompleteRequest"/>
 					<input type="submit" value="Make a complete request">

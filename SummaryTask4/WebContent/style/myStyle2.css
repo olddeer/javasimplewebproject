@@ -22,7 +22,7 @@ h2{
 	font: 40px;
 }
 table {
-		text-align: center;
+	text-align: center;
 	margin-top: 20px;
 	border:0;
 	border-collapse:collapse;
@@ -31,7 +31,10 @@ table {
 	background-color:#e6ffe6;
 	
 }
-
+#adr{
+	width:50%;
+	
+  }
 #compl{
 	padding-top: 18px;
 	float: right;

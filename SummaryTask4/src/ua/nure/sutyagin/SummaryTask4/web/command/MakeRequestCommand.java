@@ -48,8 +48,8 @@ public class MakeRequestCommand extends Command{
 			 LOG.trace("user id"+req.getDriverId());
 		trp=DBManager.getInstance().findTripById(req.getTripId());
 		 LOG.trace("trip id "+ trp.getId());
-		trp.setStatusId(4);
-		
+		trp.setStatusId(3);
+		DBManager.getInstance().deleteReq(req.getId(), req.getTripId());
 		DBManager.getInstance().updateTrip(trp);
 		LOG.trace("Trip has been updated");
 		 DBManager.getInstance().insertRequset(req);

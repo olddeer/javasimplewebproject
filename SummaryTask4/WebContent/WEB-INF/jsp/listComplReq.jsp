@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -17,10 +17,7 @@
 	<form action="Controller" method=POST>
 		<h2>LIST COMPLETED REQUESTS</h2>
 		<table border="1">
-			
-
 			<tr>
-
 				<th>Trip number</th>
 				<th>Dispatcher login</th>
 				<th>Driver login</th>

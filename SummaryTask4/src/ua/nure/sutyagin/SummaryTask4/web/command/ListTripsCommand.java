@@ -70,7 +70,7 @@ public class ListTripsCommand extends Command {
 			LOG.trace("Start MakeReq with statuses ->"+ statuses);
 			request.getSession().setAttribute("auto_types", statuses);
 		
-		//request.setAttribute("trips", trips);
+		//request.getSession().setAttribute("trips", trips);
 		LOG.debug("Command finished");
 		return Path.PAGE_LIST_TRIPS;
 	}

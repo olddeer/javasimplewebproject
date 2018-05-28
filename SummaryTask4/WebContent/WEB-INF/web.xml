@@ -32,23 +32,24 @@
     <filter-class>ua.nure.sutyagin.SummaryTask4.web.filter.CommandAccessFilter</filter-class>
     <init-param>
       <param-name>administrator</param-name>
-      <param-value>listTripsDisp makeTrip seeRequests makeCompleteRequest listComplReq listAutos listUsers makeBan makeUser</param-value>
+      <param-value>listTripsDisp makeTrip seeRequests makeCompleteRequest listComplReq listAutos listUsers makeBan regNewUser selectUpdateCar deleteCar deleteUser addAuto</param-value>
     </init-param>
+    
     <init-param>
       <param-name>driver</param-name>
-      <param-value>listTrips makeRequest completeRequest seeRequests listComplReq tripAccepted listAutos</param-value>
+      <param-value>listTrips makeRequest completeRequest seeRequests listComplReq tripAccepted listAutos setLocale map</param-value>
     </init-param>
     <init-param>
       <param-name>dispatcher</param-name>
-      <param-value>listTripsDisp makeTrip seeRequests makeCompleteRequest listComplReq listAutos</param-value>
+      <param-value>listTripsDisp makeTrip seeRequests makeCompleteRequest listComplReq listAutos setLocale listAddress addAddress deleteAdr updateAdr</param-value>
     </init-param>
     <init-param>
       <param-name>common</param-name>
-      <param-value>logout noCommand viewSettings</param-value>
+      <param-value>logout noCommand viewSettings setLocale</param-value>
     </init-param>
     <init-param>
       <param-name>out-of-control</param-name>
-      <param-value>login</param-value>
+      <param-value>login setLocale reg</param-value>
     </init-param>
   </filter>
   <filter-mapping>

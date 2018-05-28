@@ -66,7 +66,7 @@ public class Controller extends HttpServlet {
 		try {
 			forward = command.execute(request, response);
 		} catch (AppException ex) {
-			request.setAttribute("errorMessage", ex.getMessage());
+			request.getSession().setAttribute("errorMessage", ex.getMessage());
 		}
 		LOG.trace("Forward address --> " + forward);
 
@@ -79,6 +79,28 @@ public class Controller extends HttpServlet {
 	}
 
 	public void sendRedirect(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+		if(request.getParameter("command").equals("setLocale")) {
+			request.getSession().setAttribute("page", request.getParameter("page"));
+			request.getSession().setAttribute("language", request.getParameter("language"));
+			LOG.trace("page "+request.getParameter("page"));
+		}
+		if(request.getParameter("command").equals("deleteCar")) {
+			request.getSession().setAttribute("carId", request.getParameter("id"));
+			
+		}
+		if(request.getParameter("command").equals("deleteUser")) {
+			request.getSession().setAttribute("userId", request.getParameter("id"));
+			
+		}
+		if(request.getParameter("command").equals("updateCar")) {
+			request.getSession().setAttribute("carId", request.getParameter("id"));
+			
+		}
+		if(request.getParameter("command").equals("updateAdr")) {
+			request.getSession().setAttribute("adrId", request.getParameter("id"));
+			request.getSession().setAttribute("nameAdr", request.getParameter("nameAdr"));
+		}
 		if (request.getParameter("command").equals("login")) {
 			request.getSession().setAttribute("login", request.getParameter("login"));
 			request.getSession().setAttribute("password", request.getParameter("password"));
@@ -87,18 +109,56 @@ public class Controller extends HttpServlet {
 			request.getSession().setAttribute("dest", request.getParameter("dest"));
 			request.getSession().setAttribute("from", request.getParameter("from"));
 			request.getSession().setAttribute("date", request.getParameter("date"));
-
+		}
+		
+		if(request.getParameter("command").equals("listAddress") && request.getParameter("nameAdr")!=null) {
+			
+			request.getSession().setAttribute("nameAdr",  request.getParameter("nameAdr"));
+		}
+if(request.getParameter("command").equals("listAddress") && request.getParameter("nameAdrC")!=null) {
+			
+			LOG.trace( request.getParameter("nameAdrC"));
+			request.getSession().setAttribute("nameAdrC",  request.getParameter("nameAdrC"));
+		}
+		if(request.getParameter("command").equals("listAutos") && request.getParameter("autoStatus")!=null) {
+			request.getSession().setAttribute("autoStatus", request.getParameter("autoStatus"));
+			request.getSession().setAttribute("autoType",  request.getParameter("autoType"));
+			request.getSession().setAttribute("name",  request.getParameter("name"));
 		}
 		if(request.getParameter("command").equals("listUsers") && request.getParameter("log")!=null) {
-			
-			request.getSession().setAttribute("login", request.getParameter("log"));
+			LOG.trace(request.getParameter("log"));
+			request.getSession().setAttribute("login2", request.getParameter("log"));
 			request.getSession().setAttribute("passw", request.getParameter("pasw"));
 			request.getSession().setAttribute("fname", request.getParameter("fname"));
 			request.getSession().setAttribute("sname", request.getParameter("lname"));
 				request.getSession().setAttribute("role", request.getParameter("role"));
 		
 		}
+
+		if(request.getParameter("command").equals("map")) {
+			LOG.trace("we get command map "+request.getParameter("id"));
+			request.getSession().setAttribute("tripId", request.getParameter("id"));
+			
+		}
+		if(request.getParameter("command").equals("listAutos") && request.getParameter("nameAut")!=null) {
+			
+			
+			request.getSession().setAttribute("nameAut",  request.getParameter("nameAut"));
+
+			request.getSession().setAttribute("typeAut",  request.getParameter("autoType"));
+			
+		}
 		
+		if(request.getParameter("command").equals("reg")) {
+			LOG.trace("we get it " + request.getParameter("log") +"   "+request.getParameter("role"));
+			request.getSession().setAttribute("login2", request.getParameter("log"));
+			request.getSession().setAttribute("passw", request.getParameter("pasw"));
+			request.getSession().setAttribute("fname", request.getParameter("fname"));
+			request.getSession().setAttribute("sname", request.getParameter("lname"));
+				request.getSession().setAttribute("mail", request.getParameter("mail"));
+				request.getSession().setAttribute("role", request.getParameter("role"));
+		
+		}
 			if(request.getParameter("command").equals("makeBan")) {
 			
 			request.getSession().setAttribute("ban", request.getParameter("ban"));

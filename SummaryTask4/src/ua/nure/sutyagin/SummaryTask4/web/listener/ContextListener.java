@@ -3,7 +3,12 @@ package ua.nure.sutyagin.SummaryTask4.web.listener;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
  import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 

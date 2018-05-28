@@ -53,7 +53,8 @@ public class Messages {
 	public static final String ERR_CANNOT_OBTAIN_TRIP_BY_ID = "CANNOT OBTAIN TRIP BY ID";
 
 	public static final String ERR_CANNOT_OBTAIN_REQ_BY_ID = "CANNOT OBTAIN REQUEST BY ID";
-
+	public static final String ERR_CANNOT_OBTAIN_ADR_BY_ID = "CANNOT OBTAIN ADDRESS BY ID";
+	
 	public static final String ERR_CANNOT_OBTAIN_INSERT_USER = "CANNOT OBTAIN INSERT USER";
 
 	public static final String ERR_CANNOT_OBTAIN_FIND_USER_BY_LOGIN = "CANNOT OBTAIN FIND USER BY LOGIN";

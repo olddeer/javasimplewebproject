@@ -6,7 +6,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link rel="stylesheet" type="text/css" media="screen" href="${pageContext.request.contextPath}/style/myStyle2.css"/>
+<link rel="stylesheet" type="text/css" media="screen" href="${pageContext.request.contextPath}/style/myStyle3.css"/>
 
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Users</title>
@@ -20,6 +20,7 @@
 <input type="submit" value="Make new user" id="newUser"/>
 </form>
 <form action="Controller" method="POST">
+
 <table>
 <tr>
 
@@ -35,6 +36,7 @@
 										<th>Last name</th>
 										<th>Ban</th>
 										<th>Action</th>
+										<th>Delete</th>
 									</tr>
 									<c:forEach var="user" items="${listUs}" >
 									<tr>
@@ -58,8 +60,14 @@
 									<c:if test="${user.isBan()== false}">
 									<td > <div id="red" style="text-align: center;	background-color:red;	height: 20px;	width: 70px;	border:0px solid black;color: white;	border-bottom: 1px solid black;padding: 2px;">Banned</div></td>
 									<td><input type="radio" name="Unban" value="${user.getId()} "/><label>Unban</label></td>						
+									
 									</c:if>
+									<td>
+									<a href="Controller?command=deleteUser&id=${user.getId()}">Delete</a>
+										</td>
 									</tr>
+								
+									
 									</c:forEach>
 									
 				

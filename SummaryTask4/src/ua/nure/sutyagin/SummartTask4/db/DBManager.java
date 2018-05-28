@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 
 import com.mysql.jdbc.Driver;
 
+import ua.nure.sutyagin.SummaryTask4.enteties.Address;
 import ua.nure.sutyagin.SummaryTask4.enteties.Auto;
 import ua.nure.sutyagin.SummaryTask4.enteties.AutoStatus;
 import ua.nure.sutyagin.SummaryTask4.enteties.Broken_Auto;
@@ -62,18 +63,23 @@ public class DBManager {
 	private static final String SQL_FIND_ALL_TRIPS = "SELECT * FROM trips";
 	private static final String SQL_FIND_TRIPS_BY_STATUS = "SELECT * FROM trips WHERE status_id=?";
 	private static final String SQL_FIND_ALL_AUTO_STATUSES = "SELECT * FROM auto_status";
+	private static final String SQL_FIND_ALL_ADDRESS = "SELECT * FROM address";
+	private static final String SQL_FIND_ADDRESS_BY_ID = "SELECT * FROM address WHERE address_id=?";
+	private static final String SQL_FIND_ADDRESS_BY_NAME = "SELECT * FROM address WHERE name=?";
+	
+	
 	// Insert
 	private static final String SQL_INSERT_AUTO = "INSERT INTO autos VALUES  (DEFAULT, ?, ?, ?)";
-	private static final String SQL_INSERT_USER = "INSERT INTO users VALUES (DEFAULT, ?, ?, ?, ?, ?)";
+	private static final String SQL_INSERT_USER = "CALL insert_user2( ?, ?, ?, ?, ?)";
 	private static final String SQL_INSERT_TRIP = "INSERT INTO trips VALUES (DEFAULT, ?, ?, ?, ?, ?, ?)";
 	private static final String SQL_INSERT_REQUEST = "INSERT INTO requests VALUES (DEFAULT, ?, ?, ?, ?)";
-	private static final String SQL_INSERT_COMPLETED_REQUEST = "INSERT INTO completed_requests VALUES (DEFAULT, ?, ?, ?)";
+	private static final String SQL_INSERT_COMPLETED_REQUEST = "INSERT INTO completed_requests VALUES ( ?, ?, ?)";
 
 	// Find with sort
 	private static final String SQL_FIND_ALL_REQUESTS_BY_TRIP_STATUS = "SELECT * FROM `requests` WHERE trip_id IN (SELECT trip_id FROM trips WHERE status_id= ? AND dispatcher_id= ?)";
 	private static final String SQL_FIND_ALL_REQUESTS_BY_TRIP_STATUS_2 = "SELECT * FROM `requests` WHERE trip_id IN (SELECT trip_id FROM trips WHERE status_id= ?)";
 	private static final String SQL_FIND_ALL_COMPL_REQUESTS_BY_DRIVER_ID = "SELECT * FROM completed_requests WHERE completed_requests.request_id IN (SELECT requests.request_id FROM requests WHERE driver_id=? )";
-	private static final String SQL_FIND_ALL_COMPL_REQUESTS_BY_ID = "SELECT * FROM completed_requests WHERE completed_requests.id=?";
+	private static final String SQL_FIND_ALL_COMPL_REQUESTS_BY_ID = "SELECT * FROM completed_requests WHERE completed_requests.request_id=?";
 	private static final String SQL_FIND_ALL_TRIPS_BY_STATUS = "SELECT * FROM `trips` ORDER BY status_id ";
 	private static final String SQL_FIND_ALL_TRIPS_BY_ID = "SELECT * FROM `trips` ORDER BY trip_id ";
 	private static final String SQL_FIND_ALL_TRIPS_BY_DATE = "SELECT * FROM `trips` ORDER BY date_creation ";
@@ -90,14 +96,20 @@ public class DBManager {
 	private static final String SQL_UPDATE_TRIP = "UPDATE trips SET status_id = ? WHERE trip_id = ?";
 	private static final String SQL_UPDATE_AUTO = "UPDATE autos SET auto_status = ? WHERE auto_id = ?";
 	private static final String SQL_UPDATE_USER="UPDATE users SET ban = ? WHERE user_id=? ";
+	private static final String SQL_UPDATE_FULL_AUTO = "UPDATE autos SET auto_status = ?, name= ?, auto_type= ?  WHERE auto_id = ?";
+
 	
 	private static final String SQL_DELETE_AUTO = "DELETE FROM autos WHERE auto_id = ? ";
+	private static final String SQL_DELETE_USER="DELETE FROM users WHERE user_id = ?";
 	
 	private static final Logger LOG = Logger.getLogger(DBManager.class);
 	private static final String SQL_FIND_BROKE_AUTOS_BY_AUTO_ID = "SELECT * FROM broken_autos WHERE auto_id=?";
 	private static final String SQL_FIND_BROKEN_AUTOS_BY_TYPE = "SELECT * FROM broken_autos WHERE auto_id IN (SELECT auto_id FROM autos WHERE auto_type=?)";
 	private static final String SQL_INSERT_BROKEN_AUTO = "INSERT INTO broken_autos  VALUES  (DEFAULT, ?, ?)";
-
+	private static final String SQL_INSERT_ADDRESS = "INSERT INTO address VALUES(DEFAULT,?)";
+	private static final String SQL_UPDATE_ADDRESS = "UPDATE address SET name = ? WHERE address_id= ?";
+	private static final String SQL_DELETE_ADDRESS = "DELETE FROM address WHERE address_id= ?";
+	private static final String SQL_DELETE_REQUEST_BY_TRIP_ID = "DELETE FROM requests WHERE request_id= ? AND trip_id=?";
 	public static synchronized DBManager getInstance() throws ClassNotFoundException {
 		if (instance == null) {
 			instance = new DBManager();
@@ -355,6 +367,12 @@ public class DBManager {
 			con.commit();
 		} catch (SQLException ex) {
 			rollback(con);
+			
+			
+			
+			
+			
+			
 			LOG.error(Messages.ERR_CANNOT_OBTAIN_REQ_BY_ID, ex);
 			throw new DBException(Messages.ERR_CANNOT_OBTAIN_REQ_BY_ID, ex);
 		} finally {
@@ -364,31 +382,79 @@ public class DBManager {
 
 	}
 
-	public void insertUser(User user) throws DBException {
+	public String insertUser(User user) throws DBException {
 		Connection con = null;
 		PreparedStatement stmt = null;
-		try {
-			con = getConnection();
-			stmt = con.prepareStatement(SQL_INSERT_USER);
-			stmt.setString(1, user.getLogin());
-			stmt.setString(2, user.getPassword());
-			stmt.setString(3, user.getFirstName());
-			stmt.setString(4, user.getSecondName());
-			stmt.setInt(5, user.getRoleId());
 
+		String result=null;
+		try {
+
+
+			con = getConnection();
+		
+			List<User> list=this.findAllUsers();
+			for(User x: list) {
+			if(user.getLogin().trim().equals(x.getLogin())) {
+				result = "Login is required";
+				close(con);	
+				return result;
+			}
+			
+			}
+			stmt = con.prepareCall(SQL_INSERT_USER);
+			stmt.setString(3, user.getLogin().trim());
+			stmt.setString(4, user.getPassword());
+			stmt.setString(1, user.getFirstName());
+			stmt.setString(2, user.getSecondName());
+			stmt.setInt(5, user.getRoleId());
+			
 			stmt.executeUpdate();
+			
+			
 			con.commit();
 
 		} catch (SQLException ex) {
-			rollback(con);
+		  rollback(con);
 			LOG.error(Messages.ERR_CANNOT_OBTAIN_INSERT_USER, ex);
 			throw new DBException(Messages.ERR_CANNOT_OBTAIN_INSERT_USER, ex);
 		} finally {
 			close(con);
 			close(stmt);
+			
 		}
+		return result;
+		
 	}
 
+	
+	public Address findAddressById(int id) throws DBException {
+		Address adr = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		Connection con = null;
+		try {
+			con = getConnection();
+			pstmt = con.prepareStatement(SQL_FIND_ADDRESS_BY_ID);
+			pstmt.setInt(1, id);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+			adr = extractAddress(rs);
+			}
+		con.commit();
+	
+		} catch (SQLException ex) {
+			rollback(con);
+			LOG.error(Messages.ERR_CANNOT_OBTAIN_ADR_BY_ID, ex);
+			throw new DBException(Messages.ERR_CANNOT_OBTAIN_ADR_BY_ID, ex);
+		} finally {
+			close(con);
+			close(pstmt);
+			close(rs);
+		}
+		
+		return adr;
+	}
+	
 	public User findUserByLogin(String login) throws DBException {
 		User user = null;
 		PreparedStatement pstmt = null;
@@ -429,12 +495,40 @@ public class DBManager {
 		}
 	}
 
+	
+	
+
+	
+	public void insertAddress(Address adr)  {
+		Connection con=null;
+		PreparedStatement stmt=null;
+		try {
+		 con = getConnection();
+		 stmt = con.prepareStatement(SQL_INSERT_ADDRESS);
+		stmt.setString(1, adr.getName());
+		stmt.executeUpdate();
+		con.commit();}
+		catch(SQLException e) {
+			try {
+				con.rollback();
+			} catch (SQLException e1) {
+			}
+		}
+		finally {
+			close(con);
+			close(stmt);
+		}
+	}
+
+
+	
+	
 	public void insertAuto(Auto auto) throws SQLException {
 		Connection con = getConnection();
 		PreparedStatement stmt = con.prepareStatement(SQL_INSERT_AUTO);
 		stmt.setString(1, auto.getName());
 		stmt.setInt(2, auto.getAutoTypeId());
-		stmt.setString(3, auto.getName());
+		stmt.setInt(3, 1);
 		stmt.executeUpdate();
 		con.commit();
 		close(con);
@@ -458,9 +552,9 @@ public class DBManager {
 		PreparedStatement stmt = con.prepareStatement(SQL_INSERT_TRIP);
 		stmt.setDate(1, new Date(new java.util.Date().getTime()));
 		stmt.setInt(2, trip.getStatusId());
-		stmt.setString(3, trip.getDestination());
+		stmt.setInt(3, trip.getDestination_id());
 		stmt.setDate(4, trip.getDateSetOff());
-		stmt.setString(5, trip.getFrom());
+		stmt.setInt(5, trip.getFrom_id());
 		stmt.setInt(6, trip.getDispatcher_id());
 		stmt.executeUpdate();
 		con.commit();
@@ -648,6 +742,23 @@ public class DBManager {
 		return autos;
 	}
 
+	public List<Address> findAllAdr() throws SQLException {
+		 List<Address> adrList = new ArrayList<>();
+		Connection con = getConnection();
+		Statement stmt = con.createStatement();
+		ResultSet rs = stmt.executeQuery(SQL_FIND_ALL_ADDRESS);
+		while (rs.next()) {
+			Address adr = extractAddress(rs);
+			adrList.add(adr);
+		}
+		con.commit();
+		close(con);
+		close(stmt);
+		close(rs);
+		return adrList;
+
+	}
+	
 	public List<CompletedRequest> findAllCompReq() throws SQLException {
 
 		List<CompletedRequest> compList = new ArrayList<>();
@@ -729,7 +840,64 @@ public void updateUser(User us)throws SQLException {
 
 		return req;
 	}
+	public void updateAddress(Address adr)  {
+		Connection con=null;
+		PreparedStatement stmt=null;
+		try {
+		 con = getConnection();
+		 stmt = con.prepareStatement(SQL_UPDATE_ADDRESS);
+		stmt.setString(1, adr.getName());
+		stmt.setInt(2, adr.getId());
+		stmt.executeUpdate();
+		con.commit();}
+		catch(SQLException e) {
+			try {
+				con.rollback();
+			} catch (SQLException e1) {
+			}
+		}
+		finally {
+			close(con);
+			close(stmt);
+		}
+	}
 
+	public void deleteAddress(int adr)  {
+		Connection con=null;
+		PreparedStatement stmt=null;
+		try {
+		 con = getConnection();
+		 stmt = con.prepareStatement(SQL_DELETE_ADDRESS);
+		
+		stmt.setInt(1, adr);
+		stmt.executeUpdate();
+		con.commit();}
+		catch(SQLException e) {
+			try {
+				con.rollback();
+			} catch (SQLException e1) {
+			}
+		}
+		finally {
+			close(con);
+			close(stmt);
+		}
+	}
+	
+	public void updateFullAuto(Auto auto) throws SQLException {
+
+		Connection con = getConnection();
+		PreparedStatement pstmt = con.prepareStatement(SQL_UPDATE_FULL_AUTO);
+
+		pstmt.setInt(1, auto.getAutoStatusId());
+		pstmt.setString(2, auto.getName());
+		pstmt.setInt(3, auto.getAutoTypeId());
+		pstmt.setInt(4, auto.getId());
+		pstmt.executeUpdate();
+		con.commit();
+		close(con);
+		close(pstmt);
+	}
 	public void updateAuto(Auto auto) throws SQLException {
 
 		Connection con = getConnection();
@@ -766,29 +934,56 @@ public void updateUser(User us)throws SQLException {
 		return reqs;
 	}
 
-	public void deleteAuto(Auto auto) throws SQLException {
+	public void deleteAuto(int carId) throws SQLException {
 		Connection con = getConnection();
 		PreparedStatement pstmt = con.prepareStatement(SQL_DELETE_AUTO);
-		pstmt.setInt(1, auto.getId());
+		pstmt.setInt(1, carId);
 		pstmt.executeUpdate();
 		con.commit();
 		close(con);
 		close(pstmt);
 	}
-
+	public void deleteReq(int reqId,int  trip_id) throws SQLException {
+		Connection con = getConnection();
+		PreparedStatement pstmt = con.prepareStatement(SQL_DELETE_REQUEST_BY_TRIP_ID);
+		pstmt.setInt(1, reqId);
+		pstmt.setInt(2, trip_id);
+		pstmt.executeUpdate();
+		con.commit();
+		close(con);
+		close(pstmt);
+	}
+	public void deleteUser(int userId) throws SQLException {
+		Connection con = getConnection();
+		PreparedStatement pstmt = con.prepareStatement(SQL_DELETE_USER);
+		pstmt.setInt(1, userId);
+		pstmt.executeUpdate();
+		con.commit();
+		close(con);
+		close(pstmt);
+	}
 	private Trip extractTrip(ResultSet rs) throws SQLException {
 		Trip trip = new Trip();
 		trip.setDateCreation(rs.getDate("date_creation"));
 		trip.setDateSetOff(rs.getDate("date_set_off"));
-		trip.setDestination(rs.getString("destination"));
+		trip.setDestination_id(rs.getInt("destination_id"));
 		trip.setDispatcher_id(rs.getInt("dispatcher_id"));
-		trip.setFrom(rs.getString("from"));
+		trip.setFrom_id(rs.getInt("from_id"));
 		trip.setId(rs.getInt("trip_id"));
 		trip.setStatusId(rs.getInt("status_id"));
 
 		return trip;
 	}
-
+	
+	
+	
+private Address extractAddress(ResultSet rs)throws SQLException {
+	Address adr=new Address();
+	adr.setId(rs.getInt("address_id"));
+	adr.setName(rs.getString("name"));
+	return adr;
+}
+	
 	private User extractUser(ResultSet rs) throws SQLException {
 		User user = new User();
 		user.setFirstName(rs.getString("first_name"));
@@ -828,7 +1023,7 @@ public void updateUser(User us)throws SQLException {
 		cr.setAuto_id(rs.getInt("auto_id"));
 		cr.setDateCompleted(rs.getDate("date_completed"));
 		cr.setRequest_id(rs.getInt("request_id"));
-		cr.setId(rs.getInt("id"));
+
 		return cr;
 	}
 

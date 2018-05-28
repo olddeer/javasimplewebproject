@@ -17,10 +17,18 @@ public final class Path {
 	public static final String PAGE_LIST_COMPL_REQ = "/WEB-INF/jsp/listComplReq.jsp";
 	public static final String PAGE_LIST_USERS="/WEB-INF/jsp/listUsers.jsp";
 	public static final String PAGE_MAKE_USER="/WEB-INF/jsp/makeUser.jsp";
+	public static final String PAGE_UPDATE_AUTO="/WEB-INF/jsp/updateCar.jsp";
+	public static final String PAGE_MAP="/WEB-INF/jsp/tripMap.jsp";
+	
+	
 	// commands
 	public static final String COMMAND_LIST_ORDERS = "/Controller?command=listOrders";
 	public static final String COMMAND_LIST_MENU = "/Controller?command=listMenu";
 	public static final String COMMAND_LIST_TRIPS = "/Controller?command=listTrips";
 	public static final String COMMAND_LIST_TRIPS_DISP = "/Controller?command=listTripsDisp";
+	public static final String PAGE_ADD_AUTO = "/WEB-INF/jsp/addAuto.jsp";
+	public static final String PAGE_LIST_ADDRESS = "/WEB-INF/jsp/listAddress.jsp";
+	public static final String PAGE_ADD_ADDRESS = "/WEB-INF/jsp/addAddress.jsp";
+	public static final String PAGE_UPDATE_ADDRESS = "/WEB-INF/jsp/updateAddress.jsp";
 
 }

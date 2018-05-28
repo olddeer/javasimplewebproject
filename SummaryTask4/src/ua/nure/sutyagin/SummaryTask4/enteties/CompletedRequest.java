@@ -11,20 +11,20 @@ public class CompletedRequest extends Entity {
 	 * 
 	 */
 	private static final long serialVersionUID = 1422609050206053553L;
-private int id;
+
 private int request_id;
 private int auto_id;
 private Date dateCompleted;
 @Override
 public String toString() {
-	return "CompletedRequest [id=" + id + ", request_id=" + request_id + ", auto_id=" + auto_id + ", dateCompleted="
+	return "CompletedRequest [  request_id=" + request_id + ", auto_id=" + auto_id + ", dateCompleted="
 			+ dateCompleted + "]";
 }
 public int getId() {
-	return id;
+	return request_id;
 }
 public void setId(int id) {
-	this.id = id;
+	this.request_id = id;
 }
 public int getRequest_id() {
 	return request_id;
@@ -81,12 +81,28 @@ public Trip getTrip() {
 }
 
 public String getDestination() {
-	return getTrip().getDestination();
+Address adr=new Address();
+try {
+	adr = DBManager.getInstance().findAddressById(getTrip().getDestination_id());
+} catch (DBException | ClassNotFoundException e) {
+	
+	e.printStackTrace();
+}
+	
+	return adr.getName();
 }
 
 
 public String getFrom() {
-	return getTrip().getFrom();
+	Address adr=new Address();
+	try {
+		adr = DBManager.getInstance().findAddressById(getTrip().getFrom_id());
+	} catch (DBException | ClassNotFoundException e) {
+		
+		e.printStackTrace();
+	}
+		
+		return adr.getName();
 }
 
 public String getDispatcherLogin() {
@@ -145,13 +161,5 @@ public String getAutoTypeName() {
 	return typeName;
 	
 }
-public static CompletedRequest createCompletedRequest(String strin) {
-	String[] string=strin.split(" ");
-	CompletedRequest req=new CompletedRequest();
-		req.id=Integer.parseInt(string[0]);
-		req.request_id=Integer.parseInt(string[1]);
-		req.auto_id=Integer.parseInt(string[2]);
-		req.dateCompleted=Date.valueOf(string[3]);
-	return req;
-}
+
 }

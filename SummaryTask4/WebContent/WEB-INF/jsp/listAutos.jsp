@@ -17,16 +17,24 @@
 					<th>Auto name</th>
 					<th>Auto type name</th>
 					<th>Auto status</th>
-					
+					<th> </th>
+					<th> </th>
 				</tr>
 			<c:forEach var="auto" items="${listAut}">
 			<tr>
 			<td>${auto.getName()}</td>
 			<td>${auto.getAutoTypeName()}</td>
 			<td>${auto.getStatusName()}</td>
+			<td><a href="Controller?command=deleteCar&id=${auto.getId()}">Delete</a></td>
+			<td><a href="Controller?command=selectUpdateCar&id=${auto.getId()}">Update</a></td>
 			</tr>
 			</c:forEach>
+			<tr>
+			<td colspan="6">  <input type="submit" id="butMake" value="Add auto"></input>
+  </td>
+			</tr>
    </table>
+  <input type="hidden" name="command" value="addAuto"/>
 </form>
 </body>
 </html>

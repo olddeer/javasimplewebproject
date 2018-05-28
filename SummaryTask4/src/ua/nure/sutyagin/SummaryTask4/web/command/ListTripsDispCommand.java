@@ -34,8 +34,8 @@ public class ListTripsDispCommand extends Command {
 			throws IOException, ServletException, AppException {
 		LOG.trace("dest " + request.getSession().getAttribute("dest"));
 		if(request.getSession().getAttribute("dest")!=null)
-		{	String dest=(String)request.getSession().getAttribute("dest");
-			String from=(String)request.getSession().getAttribute("from");
+		{		Integer dest=Integer.parseInt(((String)request.getSession().getAttribute("dest")));
+				Integer from=Integer.parseInt(((String)request.getSession().getAttribute("from")));
 			SimpleDateFormat format = new SimpleDateFormat("mm/dd/yyyy");
 			Date dt;
 			request.getSession().setAttribute("dest",null);
@@ -49,8 +49,8 @@ public class ListTripsDispCommand extends Command {
 				trp.setDateCreation(Date.valueOf(now));
 				trp.setDispatcher_id(((User)request.getSession().getAttribute("user")).getId());
 				
-				trp.setDestination(dest);
-				trp.setFrom(from);
+				trp.setDestination_id(dest);
+				trp.setFrom_id(from);
 				trp.setStatusId(3);
 				trp.setDateSetOff(dt);
 				DBManager.getInstance().insertTrip(trp);
